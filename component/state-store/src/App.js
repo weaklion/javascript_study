@@ -1,31 +1,28 @@
 import { Component } from "./core/Component.js";
+import { store } from './store.js';
 
-export class App extends Component {
-  initState() {
-    return {
-      a : 10,
-      b : 20,
-    }
-  }
+const InputA = () => `<input id="stateA" value="${store.state.a}" size="5" />`;
+const InputB = () => `<input id="stateB" value="${store.state.b}" size="5" />`;
+const Calculator = () => `<p>a + b = ${store.state.a + store.state.b}</p>`;
 
-  template() {
-    const { a, b } = this.state;
+export default class App extends Component {
+  template () {
     return `
-    <input id="stateA" value="${a}" size="5" />
-    <input id="stateB" value="${b}" size="5" />
-    <p>a + b = ${a + b}</p>
-  `;
+      ${InputA()}
+      ${InputB()}
+      ${Calculator()}
+    `;
   }
 
   setEvent () {
-    const { $el, state } = this;
 
-    $el.querySelector('#stateA').addEventListener('change', ({ target }) => {
-      state.a = Number(target.value);
+    this.$el.querySelector('#stateA').addEventListener('change', ({ target }) => {
+      store.commit('SET_A', Number(target.value));
     })
 
-    $el.querySelector('#stateB').addEventListener('change', ({ target }) => {
-      state.b = Number(target.value);
+    this.$el.querySelector('#stateB').addEventListener('change', ({ target }) => {
+      store.commit('SET_B', Number(target.value));
     })
+
   }
 }
